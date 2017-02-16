@@ -26,6 +26,7 @@ public class Scrabble extends Application {
         stage.setScene(scene);
         stage.show();
         sta=stage;
+        //es un comentario
     }
     /**
      * @param args the command line arguments
