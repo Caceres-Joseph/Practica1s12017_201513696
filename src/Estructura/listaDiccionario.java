@@ -6,7 +6,7 @@ package Estructura;
  */
 public class listaDiccionario {
 
-    public static Nodo cabeza = null;
+    public Nodo cabeza = null;
 
     public void saludar() {
         System.out.println("hola");
