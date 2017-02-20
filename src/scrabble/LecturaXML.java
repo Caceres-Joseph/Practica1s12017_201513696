@@ -31,8 +31,7 @@ public class LecturaXML implements Initializable {
     @FXML
     void btnAccionPlay(ActionEvent event) {
         
-        listaDiccionario Lista= new listaDiccionario();
-        System.out.println(Lista.buscar("primera"));
+        System.out.println(LeerXML.ListaDiccionario.buscar("primera"));
     }
     @FXML
     void accionLeer(ActionEvent event) {

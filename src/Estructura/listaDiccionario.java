@@ -18,7 +18,7 @@ public class listaDiccionario {
         if (cabeza != null) {
             nodo.siguiente = cabeza;
         }
-
+        
         cabeza = nodo;
     }
 
@@ -26,12 +26,14 @@ public class listaDiccionario {
 
         Nodo puntero = cabeza;
         while (puntero.siguiente != null) {
+            
+            puntero = puntero.siguiente;
             puntero = puntero.siguiente;
             if (puntero.palabra.equals(busqueda)) {
                 System.out.println(puntero.palabra);
+                 break;
             }
-            puntero = puntero.siguiente;
-            break;
+            
         }
         return true;
     }

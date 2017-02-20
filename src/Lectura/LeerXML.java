@@ -5,7 +5,6 @@ package Lectura;
  * @author joseph
  */
 import Estructura.listaDiccionario;
-import Estructura.listaDiccionario.Nodo;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -15,11 +14,11 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
 public class LeerXML {
-    listaDiccionario ListaDiccionario= new listaDiccionario();
-    
-    
+
+  public static listaDiccionario ListaDiccionario = new listaDiccionario();
+
     public LeerXML(String ruta) {
-        
+
         SAXBuilder builder = new SAXBuilder();
         File xmlFile = new File(ruta);
         try {
@@ -27,7 +26,7 @@ public class LeerXML {
             Element rootNode = document.getRootElement();
 
             List dimension = rootNode.getChildren("dimension");//Capturando las palabras
-            
+
             System.out.println("\n----Tablero----");
             Element node4 = (Element) dimension.get(0);
             System.out.println("Dimensión: " + node4.getText());
@@ -62,10 +61,9 @@ public class LeerXML {
                 for (int j = 0; j < listaPalabras.size(); j++) {
                     Element node2 = (Element) listaPalabras.get(j);
                     System.out.println("Palabra: " + node2.getText());
-                   ListaDiccionario.insertarAlPrincipio(node2.getText());
+                    ListaDiccionario.insertarAlPrincipio(node2.getText());
                 }
             }
-
         } catch (IOException io) {
             System.out.println(io.getMessage());
         } catch (JDOMException jdomex) {
