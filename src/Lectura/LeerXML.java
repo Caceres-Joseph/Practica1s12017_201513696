@@ -4,6 +4,7 @@ package Lectura;
  *
  * @author joseph
  */
+import Estructura.colaLetra;
 import Estructura.listaDiccionario;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import org.jdom2.input.SAXBuilder;
 public class LeerXML {
 
   public static listaDiccionario ListaDiccionario = new listaDiccionario();
+  public static colaLetra colaLetra1=new colaLetra();
 
     public LeerXML(String ruta) {
 
@@ -70,5 +72,5 @@ public class LeerXML {
             System.out.println(jdomex.getMessage());
         }
     }
-
+    
 }

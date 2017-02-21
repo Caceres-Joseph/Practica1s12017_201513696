@@ -1,5 +1,7 @@
 package scrabble;
 
+import Estructura.colaLetra;
+import Estructura.letra;
 import Estructura.listaDiccionario;
 import Juego.Tablero;
 import Lectura.LeerXML;
@@ -8,17 +10,18 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.ThreadLocalRandom;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javax.swing.JOptionPane;
 
 /**
  * FXML Controller class
@@ -26,6 +29,10 @@ import javafx.stage.Stage;
  * @author joseph
  */
 public class LecturaXML implements Initializable {
+
+    // colaLetra colaLetra1 = new colaLetra();
+    listaDiccionario listaTemporalDeLetras = new listaDiccionario();
+    colaLetra colaDeLetras = new colaLetra();
 
     @FXML
     private JFXButton btnLeer;
@@ -37,24 +44,25 @@ public class LecturaXML implements Initializable {
     @FXML
     void btnAccionPlay(ActionEvent event) throws IOException {
 //        System.out.println(LeerXML.ListaDiccionario.buscar("primera"));
-        try {
-            //AnchorPane p = FXMLLoader.load(getClass().getResource("/venta_1/" + a));
-            FXMLLoader loader = new FXMLLoader(Scrabble.class.getResource("/Scrabble/Juego/Tablero.fxml"));
-           
-            AnchorPane ventanaDos = (AnchorPane) loader.load();
-            Stage ventana = new Stage();
-            ventana.setTitle("Venta Dos");
-            ventana.initOwner(Scrabble.sta);
-            Scene scene = new Scene(ventanaDos);
-            ventana.setScene(scene);
-            Tablero controller = loader.getController();
-            controller.setStagePrincipal(ventana);
-            ventana.show();
 
-        } catch (Exception e) {
-            System.out.println(e);
+//        try {
+//            System.out.println(colaLetra1.pop().letra);
+//        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(null, "Ya no hay palabras");
+//        }
+        meterLetras();
+        //System.out.println(listaTemporalDeLetras.longitud);
+        //listaTemporalDeLetras.imprimir();
+        Integer longitudDeListaTemporal= listaTemporalDeLetras.longitud;
+        for (int i = 0; i < longitudDeListaTemporal; i++) {
+            int numero = ThreadLocalRandom.current().nextInt(0, listaTemporalDeLetras.longitud);
+            letra nuevaLetra = new letra(listaTemporalDeLetras.pop(numero));
+            colaDeLetras.push(nuevaLetra);
         }
-
+        for (int i = 0; i < longitudDeListaTemporal; i++) {
+            letra LetraTemporal= colaDeLetras.pop();
+            System.out.println(LetraTemporal.letra+" -- "+String.valueOf(LetraTemporal.valor));
+        }
     }
 
     @FXML
@@ -80,5 +88,76 @@ public class LecturaXML implements Initializable {
 
         Image clip = new Image(getClass().getResourceAsStream("/Images/clip24.png"), 24, 24, false, false);
         btnLeer.setGraphic(new ImageView(clip));
+        /*
+        for (int i = 0; i < 10; i++) {
+            letra nuevaLetra = new letra("A" + String.valueOf(i));
+            //colaLetra1.push(nuevaLetra);
+        }
+        for (int i = 0; i < 10; i++) {
+            listaDiccionario1.insertarDeUltimo(String.valueOf(i));
+        }*/
+    }
+
+    public void abrirTablero() {
+        try {
+            //AnchorPane p = FXMLLoader.load(getClass().getResource("/venta_1/" + a));
+            FXMLLoader loader = new FXMLLoader(Scrabble.class.getResource("/Juego/Tablero.fxml"));
+
+            AnchorPane ventanaDos = (AnchorPane) loader.load();
+            Stage ventana = new Stage();
+            ventana.setTitle("Venta Dos");
+            ventana.initOwner(Scrabble.sta);
+            Scene scene = new Scene(ventanaDos);
+            ventana.setScene(scene);
+            Tablero controller = loader.getController();
+            controller.setStagePrincipal(ventana);
+            ventana.show();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public void meterLetras() {
+        for (int i = 0; i < 12; i++) {
+            listaTemporalDeLetras.insertarAlPrincipio("A");
+            listaTemporalDeLetras.insertarAlPrincipio("E");
+        }
+        for (int i = 0; i < 9; i++) {
+            listaTemporalDeLetras.insertarAlPrincipio("O");
+        }
+        for (int i = 0; i < 6; i++) {
+            listaTemporalDeLetras.insertarAlPrincipio("I");
+            listaTemporalDeLetras.insertarAlPrincipio("S");
+        }
+        for (int i = 0; i < 5; i++) {
+            listaTemporalDeLetras.insertarAlPrincipio("N");
+            listaTemporalDeLetras.insertarAlPrincipio("R");
+            listaTemporalDeLetras.insertarAlPrincipio("U");
+            listaTemporalDeLetras.insertarAlPrincipio("D");
+
+        }
+        for (int i = 0; i < 4; i++) {
+            listaTemporalDeLetras.insertarAlPrincipio("L");
+            listaTemporalDeLetras.insertarAlPrincipio("T");
+            listaTemporalDeLetras.insertarAlPrincipio("C");
+
+        }
+        for (int i = 0; i < 2; i++) {
+            listaTemporalDeLetras.insertarAlPrincipio("G");
+            listaTemporalDeLetras.insertarAlPrincipio("B");
+            listaTemporalDeLetras.insertarAlPrincipio("M");
+            listaTemporalDeLetras.insertarAlPrincipio("P");
+            listaTemporalDeLetras.insertarAlPrincipio("H");
+
+        }
+        listaTemporalDeLetras.insertarAlPrincipio("F");
+        listaTemporalDeLetras.insertarAlPrincipio("V");
+        listaTemporalDeLetras.insertarAlPrincipio("Y");
+        listaTemporalDeLetras.insertarAlPrincipio("Q");
+        listaTemporalDeLetras.insertarAlPrincipio("J");
+        listaTemporalDeLetras.insertarAlPrincipio("Ñ");
+        listaTemporalDeLetras.insertarAlPrincipio("X");
+        listaTemporalDeLetras.insertarAlPrincipio("Z");
     }
 }
