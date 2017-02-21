@@ -3,6 +3,8 @@ package scrabble;
 import Estructura.colaLetra;
 import Estructura.letra;
 import Estructura.listaDiccionario;
+import Estructura.listaUsuario;
+import Estructura.usuario;
 import Juego.Tablero;
 import Lectura.LeerXML;
 import com.jfoenix.controls.JFXButton;
@@ -21,7 +23,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javax.swing.JOptionPane;
 
 /**
  * FXML Controller class
@@ -32,7 +33,8 @@ public class LecturaXML implements Initializable {
 
     // colaLetra colaLetra1 = new colaLetra();
     listaDiccionario listaTemporalDeLetras = new listaDiccionario();
-    colaLetra colaDeLetras = new colaLetra();
+    public static colaLetra colaDeLetras = new colaLetra();
+    listaUsuario listaDeUsuario = new listaUsuario();
 
     @FXML
     private JFXButton btnLeer;
@@ -40,29 +42,12 @@ public class LecturaXML implements Initializable {
     @FXML
     private JFXButton btnPlay;
     LeerXML leer;
+    listaUsuario temp = new listaUsuario();
 
     @FXML
     void btnAccionPlay(ActionEvent event) throws IOException {
-//        System.out.println(LeerXML.ListaDiccionario.buscar("primera"));
-
-//        try {
-//            System.out.println(colaLetra1.pop().letra);
-//        } catch (Exception e) {
-//            JOptionPane.showMessageDialog(null, "Ya no hay palabras");
-//        }
-        meterLetras();
-        //System.out.println(listaTemporalDeLetras.longitud);
-        //listaTemporalDeLetras.imprimir();
-        Integer longitudDeListaTemporal= listaTemporalDeLetras.longitud;
-        for (int i = 0; i < longitudDeListaTemporal; i++) {
-            int numero = ThreadLocalRandom.current().nextInt(0, listaTemporalDeLetras.longitud);
-            letra nuevaLetra = new letra(listaTemporalDeLetras.pop(numero));
-            colaDeLetras.push(nuevaLetra);
-        }
-        for (int i = 0; i < longitudDeListaTemporal; i++) {
-            letra LetraTemporal= colaDeLetras.pop();
-            System.out.println(LetraTemporal.letra+" -- "+String.valueOf(LetraTemporal.valor));
-        }
+        System.out.println(listaDeUsuario.avanzarUnEspacio().nombre);
+        
     }
 
     @FXML
@@ -88,14 +73,13 @@ public class LecturaXML implements Initializable {
 
         Image clip = new Image(getClass().getResourceAsStream("/Images/clip24.png"), 24, 24, false, false);
         btnLeer.setGraphic(new ImageView(clip));
-        /*
-        for (int i = 0; i < 10; i++) {
-            letra nuevaLetra = new letra("A" + String.valueOf(i));
-            //colaLetra1.push(nuevaLetra);
+        llenarLaColaDeLetras();
+
+        for (int i = 0; i < 3; i++) {
+            usuario user = new usuario();
+            user.nombre = "Juan" + String.valueOf(i);
+            listaDeUsuario.insertarUsuario(user);
         }
-        for (int i = 0; i < 10; i++) {
-            listaDiccionario1.insertarDeUltimo(String.valueOf(i));
-        }*/
     }
 
     public void abrirTablero() {
@@ -115,6 +99,21 @@ public class LecturaXML implements Initializable {
 
         } catch (Exception e) {
             System.out.println(e);
+        }
+    }
+
+    public void llenarLaColaDeLetras() {
+        meterLetras();
+
+        Integer longitudDeListaTemporal = listaTemporalDeLetras.longitud;
+        for (int i = 0; i < longitudDeListaTemporal; i++) {
+            int numero = ThreadLocalRandom.current().nextInt(0, listaTemporalDeLetras.longitud);
+            letra nuevaLetra = new letra(listaTemporalDeLetras.pop(numero));
+            colaDeLetras.push(nuevaLetra);
+        }
+        for (int i = 0; i < longitudDeListaTemporal; i++) {
+            letra LetraTemporal = colaDeLetras.pop();
+            // System.out.println(LetraTemporal.letra + " -- " + String.valueOf(LetraTemporal.valor));
         }
     }
 
@@ -160,4 +159,5 @@ public class LecturaXML implements Initializable {
         listaTemporalDeLetras.insertarAlPrincipio("X");
         listaTemporalDeLetras.insertarAlPrincipio("Z");
     }
+
 }
