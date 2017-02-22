@@ -13,16 +13,18 @@ import javafx.scene.paint.Color;
  * @author joseph
  */
 public class ficha {
-
+    
     public Label letra;
     public Integer valorCasilla;
     public int fila;
     public int columna;
+    public boolean hayLetraTemporal;
 
     public ficha(int fila, int columna) {
         this.fila = fila;
         this.columna = columna;
         crearLabel();
+        hayLetraTemporal=false;
     }
 
     public void crearLabel() {
@@ -49,8 +51,8 @@ public class ficha {
         letra.setOnDragDropped(new EventHandler<DragEvent>() {
             public void handle(DragEvent event) {
                 String str = event.getDragboard().getString();
-                letra.setText(str);
-                System.out.println("LLego la letra");
+                letra.setText(str);///validar que llegó la letra
+                hayLetraTemporal=true;
             }
         });
     }

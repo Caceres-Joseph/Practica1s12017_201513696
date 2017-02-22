@@ -1,0 +1,19 @@
+digraph grafo {
+node [shape=circle];
+node [style=filled];
+node [fillcolor="#EEEEEE"];
+node [color="#EEEEEE"];
+edge [color="#005500   #214a89"];
+PAN->JUEGO;
+JUEGO->CORREO;
+CORREO->PRIMERA;
+PRIMERA->PRACTICA;
+PRACTICA->UNIVERSIDAD;
+UNIVERSIDAD->TRES;
+TRES->DOS;
+DOS->UNO;
+UNO->ESTAS;
+ESTAS->COMO;
+COMO->MUNDO;
+
+rankdir=LR;}

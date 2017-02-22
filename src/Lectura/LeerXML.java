@@ -65,8 +65,11 @@ public class LeerXML {
                 List listaPalabras = node.getChildren("palabra");
                 for (int j = 0; j < listaPalabras.size(); j++) {
                     Element node2 = (Element) listaPalabras.get(j);
-                    System.out.println("Palabra: " + node2.getText());
-                    ListaDiccionario.insertarAlPrincipio(node2.getText());
+                    String palabraDeDiccionario=node2.getText();
+                    String palDicc=palabraDeDiccionario.toUpperCase();
+                            // System.out.println(miCadena.toUpperCase());
+                    System.out.println("Palabra: " + palDicc);
+                    ListaDiccionario.insertarAlPrincipio(palDicc);
                 }
             }
         } catch (IOException io) {

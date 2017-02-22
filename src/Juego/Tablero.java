@@ -6,9 +6,13 @@ import Estructura.matrizOrtogonal;
 import Estructura.usuario;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTabPane;
+import java.io.File;
+import java.lang.Thread.State;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -16,6 +20,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -31,6 +38,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 
@@ -42,8 +51,10 @@ import javax.swing.JOptionPane;
 public class Tablero implements Initializable {
 
     listaUsuario listaDeUsuario = new listaUsuario();
-    matrizOrtogonal matriz =new matrizOrtogonal(Lectura.LeerXML.dimensionMatriz);
-    
+    matrizOrtogonal matriz = new matrizOrtogonal(Lectura.LeerXML.dimensionMatriz);
+
+    @FXML
+    private WebView webDiccionario;
 
     @FXML
     private JFXButton PrimerFicha;
@@ -57,13 +68,13 @@ public class Tablero implements Initializable {
     private JFXButton PrimerFicha3;
 
     @FXML
-    private JFXButton PrimerFicha31;
+    private JFXButton PrimerFicha4;
 
     @FXML
-    private JFXButton PrimerFicha32;
+    private JFXButton PrimerFicha5;
 
     @FXML
-    private JFXButton PrimerFicha33;
+    private JFXButton PrimerFicha6;
 
     @FXML
     private ScrollPane panelFihcasTablero; //tabla en donde se encuentran las fichas
@@ -101,6 +112,7 @@ public class Tablero implements Initializable {
 
         // TODO
         pintarCuadritos();
+      inicializarWeb();
     }
 
     @FXML
@@ -120,6 +132,51 @@ public class Tablero implements Initializable {
         //pintarLabels();
     }
 
+    @FXML
+    void agregarPalabra(ActionEvent event) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Ingrese la nueva palabra");
+        dialog.setHeaderText("Ingresar palabra al diccionario:");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            Lectura.LeerXML.ListaDiccionario.insertarAlPrincipio(result.get().toUpperCase());
+        }
+
+    }
+
+    @FXML
+    void btnPrueba2(ActionEvent event) {
+        /*
+        //Lectura.LeerXML.ListaDiccionario.actuaalizarDot();
+//         WebEngine webEngine = webDiccionario.getEngine();
+        String ruta = new File("").getAbsolutePath();
+        ruta = "file://" + ruta + "/src/Images/Grafo/diccionario.html";
+//        webEngine.load(ruta);
+        System.out.println("boton");
+        try {
+            apProductos.getChildren().clear();
+            //apCaja.getChildren().clear();
+            WebView wu = new WebView();
+            WebEngine web = wu.getEngine();
+            ruta = "file://" + ruta + "/src/Images/Grafo/diccionario.html";
+            ScrollPane scrollPane = new ScrollPane();
+            scrollPane.setContent(wu);
+
+            web.load(ruta);
+
+            apProductos.getChildren().add(scrollPane);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        */
+        Lectura.LeerXML.ListaDiccionario.actuaalizarDot();
+            webEngine.reload();
+        
+
+    }
+
     public void setStagePrincipal(Stage stagePrincipal) {
         this.stagePrincipal = stagePrincipal;
         stagePrincipal.setMaximized(true);
@@ -127,12 +184,23 @@ public class Tablero implements Initializable {
 
     @FXML
     void btnPrueba1(ActionEvent event) {//iniciar juego
-        String fil=JOptionPane.showInputDialog("fila");
-        Integer fila=Integer.valueOf(fil);
-        String col=JOptionPane.showInputDialog("columna");
-        Integer columna=Integer.valueOf(col);
-        System.out.println(matriz.devolverFichaMatriz(fila,columna).letra.getText());
-        
+        try {
+            PrimerFicha.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
+            PrimerFicha1.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
+            PrimerFicha2.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
+            PrimerFicha3.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
+            PrimerFicha4.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
+            PrimerFicha5.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
+            PrimerFicha6.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
+        } catch (Exception e) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("...");
+            alert.setHeaderText("Fin del Juego");
+            String s = "Ya no hay más letras en la cola";
+            alert.setContentText(s);
+            alert.show();
+        }
+
     }
 
     @FXML
@@ -147,25 +215,25 @@ public class Tablero implements Initializable {
         HBox horizontal = new HBox();
         BorderPane panelBorde = new BorderPane();
         horizontal.setSpacing(7.0);
-        
+
         for (int i = 0; i < Lectura.LeerXML.dimensionMatriz; i++) {
             for (int j = 0; j < Lectura.LeerXML.dimensionMatriz; j++) {
-                ficha fichaTablero=new ficha(j, i);
+                ficha fichaTablero = new ficha(j, i);
                 matriz.insertarElementoEnPosicion(j, i, fichaTablero);
             }
         }
-        
+
         for (int j = 0; j < Lectura.LeerXML.dimensionMatriz; j++) {
             VBox verticalSupremo = new VBox();
             verticalSupremo.setSpacing(7.0);
             for (int k = 0; k < Lectura.LeerXML.dimensionMatriz; k++) {
-                
+
                 verticalSupremo.getChildren().add(matriz.devolverFichaMatriz(k, j).letra);
             }
             horizontal.setAlignment(Pos.CENTER);
             horizontal.getChildren().add(verticalSupremo);
         }
-        
+
         panelBorde.setCenter(horizontal);
         panelFihcasTablero.setContent(panelBorde);
 
@@ -239,7 +307,7 @@ public class Tablero implements Initializable {
 
     @FXML
     void PrimerDone(DragEvent event) {
-        System.out.println("se completo");
+        PrimerFicha.setText("");
     }
 
     @FXML
@@ -253,7 +321,85 @@ public class Tablero implements Initializable {
 
     @FXML
     void PrimerDone2(DragEvent event) {
-        System.out.println("se completo");
+        PrimerFicha2.setText("");
+    }
+
+    @FXML
+    void PrimerDrag1(MouseEvent event) {
+        Dragboard db = PrimerFicha1.startDragAndDrop(TransferMode.ANY);
+        ClipboardContent cb = new ClipboardContent();
+        cb.putString(PrimerFicha1.getText());
+        db.setContent(cb);
+        event.consume();
+    }
+
+    @FXML
+    void PrimerDone1(DragEvent event) {
+        PrimerFicha1.setText("");
+    }
+
+    @FXML
+    void PrimerDrag3(MouseEvent event) {
+        Dragboard db = PrimerFicha3.startDragAndDrop(TransferMode.ANY);
+        ClipboardContent cb = new ClipboardContent();
+        cb.putString(PrimerFicha3.getText());
+        db.setContent(cb);
+        event.consume();
+    }
+
+    @FXML
+    void PrimerDone3(DragEvent event) {
+        PrimerFicha3.setText("");
+    }
+
+    @FXML
+    void PrimerDrag4(MouseEvent event) {
+        Dragboard db = PrimerFicha4.startDragAndDrop(TransferMode.ANY);
+        ClipboardContent cb = new ClipboardContent();
+        cb.putString(PrimerFicha4.getText());
+        db.setContent(cb);
+        event.consume();
+    }
+
+    @FXML
+    void PrimerDone4(DragEvent event) {
+        PrimerFicha4.setText("");
+    }
+
+    @FXML
+    void PrimerDrag5(MouseEvent event) {
+        Dragboard db = PrimerFicha5.startDragAndDrop(TransferMode.ANY);
+        ClipboardContent cb = new ClipboardContent();
+        cb.putString(PrimerFicha5.getText());
+        db.setContent(cb);
+        event.consume();
+    }
+
+    @FXML
+    void PrimerDone5(DragEvent event) {
+        PrimerFicha5.setText("");
+    }
+
+    @FXML
+    void PrimerDrag6(MouseEvent event) {
+        Dragboard db = PrimerFicha6.startDragAndDrop(TransferMode.ANY);
+        ClipboardContent cb = new ClipboardContent();
+        cb.putString(PrimerFicha6.getText());
+        db.setContent(cb);
+        event.consume();
+    }
+
+    @FXML
+    void PrimerDone6(DragEvent event) {
+        PrimerFicha6.setText("");
+    }
+WebEngine webEngine;
+    //src/Images/Grafo/
+    public void inicializarWeb() {
+        webEngine=webDiccionario.getEngine();
+        String ruta = new File("").getAbsolutePath();
+        ruta = "file://" + ruta + "/src/Images/Grafo/diccionario.html";
+        webEngine.load(ruta);
     }
 
 }

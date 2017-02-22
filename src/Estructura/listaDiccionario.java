@@ -1,5 +1,7 @@
 package Estructura;
 
+import Reporte.archivoDot;
+
 /**
  *
  * @author joseph
@@ -8,7 +10,8 @@ public class listaDiccionario {
 
     public Nodo cabeza = null;
     public int longitud = 0;
-
+    archivoDot archiDot=new archivoDot();
+    Integer contadorDot=0;
     /**
      * ******************
      *                  *
@@ -124,6 +127,31 @@ public class listaDiccionario {
         }
         System.out.println(puntero.palabra);
         System.out.println("----------------------fin--------------------");
+    }
+
+    public String cadenaDot() {
+        String cadena = "";
+        Nodo puntero = cabeza;
+
+        while (puntero.siguiente.siguiente != null) {
+
+//        String lineasDot = " V1 -> V2;\n";
+//        lineasDot=lineasDot+" V2 <- V1;";
+//        System.out.println(lineasDot);
+//        return lineasDot;
+            cadena = cadena + puntero.palabra + "->" + puntero.siguiente.palabra + ";\n";
+            
+            System.out.println(puntero.palabra);
+            puntero = puntero.siguiente;
+        }
+        return cadena;
+    }
+    public Integer actuaalizarDot(){
+       archiDot.escribirHTMLDiccionario(contadorDot);
+        archiDot.escribirDiccionario(cadenaDot());
+        archiDot.dibujarDiccionario(contadorDot);
+        
+       return  contadorDot++;
     }
 
     public boolean buscar(String busqueda) {

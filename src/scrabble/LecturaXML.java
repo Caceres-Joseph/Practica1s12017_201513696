@@ -18,6 +18,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -34,7 +36,6 @@ public class LecturaXML implements Initializable {
     // colaLetra colaLetra1 = new colaLetra();
     listaDiccionario listaTemporalDeLetras = new listaDiccionario();
     public static colaLetra colaDeLetras = new colaLetra();
-    listaUsuario listaDeUsuario = new listaUsuario();
 
     @FXML
     private JFXButton btnLeer;
@@ -75,12 +76,8 @@ public class LecturaXML implements Initializable {
         Image clip = new Image(getClass().getResourceAsStream("/Images/clip24.png"), 24, 24, false, false);
         btnLeer.setGraphic(new ImageView(clip));
         llenarLaColaDeLetras();
+        
 
-        for (int i = 0; i < 3; i++) {
-            usuario user = new usuario();
-            user.nombre = "Juan" + String.valueOf(i);
-            listaDeUsuario.insertarUsuario(user);
-        }
     }
 
     public void abrirTablero() {
@@ -100,7 +97,12 @@ public class LecturaXML implements Initializable {
             ventana.show();
 
         } catch (Exception e) {
-            System.out.println(e);
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("...");
+            alert.setHeaderText("Falta la entrada de texto");
+            String s = "No se ha leído el archivo, por favor introduzacalo para poder jugar";
+            alert.setContentText(s);
+            alert.show();
         }
     }
 
@@ -112,10 +114,6 @@ public class LecturaXML implements Initializable {
             int numero = ThreadLocalRandom.current().nextInt(0, listaTemporalDeLetras.longitud);
             letra nuevaLetra = new letra(listaTemporalDeLetras.pop(numero));
             colaDeLetras.push(nuevaLetra);
-        }
-        for (int i = 0; i < longitudDeListaTemporal; i++) {
-            letra LetraTemporal = colaDeLetras.pop();
-            // System.out.println(LetraTemporal.letra + " -- " + String.valueOf(LetraTemporal.valor));
         }
     }
 
