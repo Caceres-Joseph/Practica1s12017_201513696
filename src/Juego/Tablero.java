@@ -1,13 +1,34 @@
 package Juego;
 
+import Estructura.listaUsuario;
+import Estructura.usuario;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTabPane;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -16,6 +37,31 @@ import javafx.stage.Stage;
  * @author joseph
  */
 public class Tablero implements Initializable {
+
+    listaUsuario listaDeUsuario = new listaUsuario();
+
+    @FXML
+    private JFXButton PrimerFicha;
+    @FXML
+    private JFXButton PrimerFicha1;
+
+    @FXML
+    private JFXButton PrimerFicha2;
+
+    @FXML
+    private JFXButton PrimerFicha3;
+
+    @FXML
+    private JFXButton PrimerFicha31;
+
+    @FXML
+    private JFXButton PrimerFicha32;
+
+    @FXML
+    private JFXButton PrimerFicha33;
+
+    @FXML
+    private ScrollPane panelFihcasTablero; //tabla en donde se encuentran las fichas
 
     private Stage stagePrincipal;
     @FXML
@@ -47,11 +93,35 @@ public class Tablero implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         // TODO
+    }
+
+    @FXML
+    void agregarUsuario(ActionEvent event) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Ingrese el nombre del usuario");
+        dialog.setHeaderText("Ingresar");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            usuario user = new usuario();
+            user.nombre = result.get();
+            user.puntuacion = 0;
+            listaDeUsuario.insertarUsuario(user);
+        }
+
+        //pintarLabels();
     }
 
     public void setStagePrincipal(Stage stagePrincipal) {
         this.stagePrincipal = stagePrincipal;
+        stagePrincipal.setMaximized(true);
+    }
+
+    @FXML
+    void btnPrueba1(ActionEvent event) {//iniciar juego
+        
     }
 
     @FXML
@@ -61,4 +131,90 @@ public class Tablero implements Initializable {
     @FXML
     private void clickTabPane(MouseEvent event) {
     }
+
+    public void pintarLabels() {
+        HBox horizontal = new HBox();
+        BorderPane panelBorde = new BorderPane();
+//        panelBorde.prefHeightProperty().bind(panelFihcasTablero.heightProperty());
+        horizontal.setSpacing(7.0);
+        for (int j = 0; j < 13; j++) {
+            VBox verticalSupremo = new VBox();
+            verticalSupremo.setSpacing(7.0);
+            for (int k = 0; k < 13; k++) {
+                Label boton = new Label("");
+
+                boton.setAlignment(Pos.CENTER);
+                boton.setStyle("-fx-background-color:white;-fx-font: 25 arial; -fx-background-radius:0.2em;-fx-text-fill:#043761;-fx-font-weight: bold;");
+                DropShadow dropShadow = new DropShadow();
+                dropShadow.setRadius(5.0);
+                dropShadow.setOffsetX(3.0);
+                dropShadow.setOffsetY(3.0);
+                dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
+                boton.setEffect(dropShadow);
+                boton.setPrefSize(50.0, 40.0);
+
+                boton.setOnDragOver(new EventHandler<DragEvent>() {
+                    public void handle(DragEvent event) {
+                        if (event.getDragboard().hasString()) {
+                            event.acceptTransferModes(TransferMode.ANY);
+                        }
+                    }
+                });
+
+                boton.setOnDragDropped(new EventHandler<DragEvent>() {
+                    public void handle(DragEvent event) {
+                        String str = event.getDragboard().getString();
+                        boton.setText(str);
+                        System.out.println("LLego la letra");
+                    }
+                });
+
+                verticalSupremo.getChildren().add(boton);
+
+            }
+            horizontal.setAlignment(Pos.CENTER);
+            horizontal.getChildren().add(verticalSupremo);
+        }
+        Label etri = new Label("hola");
+        //panelBorde.setRight(etri);
+        panelBorde.setLeft(etri);
+
+        panelBorde.setCenter(horizontal);
+        panelFihcasTablero.setContent(panelBorde);
+
+    }
+
+    /**
+     * ******************
+     *                  *
+     * Fichas de la mano*
+     */
+    @FXML
+    void PrimerDrag(MouseEvent event) {
+        Dragboard db = PrimerFicha.startDragAndDrop(TransferMode.ANY);
+        ClipboardContent cb = new ClipboardContent();
+        cb.putString(PrimerFicha.getText());
+        db.setContent(cb);
+        event.consume();
+    }
+
+    @FXML
+    void PrimerDone(DragEvent event) {
+        System.out.println("se completo");
+    }
+
+    @FXML
+    void PrimerDrag2(MouseEvent event) {
+        Dragboard db = PrimerFicha2.startDragAndDrop(TransferMode.ANY);
+        ClipboardContent cb = new ClipboardContent();
+        cb.putString(PrimerFicha2.getText());
+        db.setContent(cb);
+        event.consume();
+    }
+
+    @FXML
+    void PrimerDone2(DragEvent event) {
+        System.out.println("se completo");
+    }
+
 }

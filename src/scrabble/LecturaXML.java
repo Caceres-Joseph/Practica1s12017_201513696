@@ -46,8 +46,9 @@ public class LecturaXML implements Initializable {
 
     @FXML
     void btnAccionPlay(ActionEvent event) throws IOException {
-        System.out.println(listaDeUsuario.avanzarUnEspacio().nombre);
-        
+//        System.out.println(listaDeUsuario.avanzarUnEspacio().nombre);
+        abrirTablero();
+
     }
 
     @FXML
@@ -93,6 +94,7 @@ public class LecturaXML implements Initializable {
             ventana.initOwner(Scrabble.sta);
             Scene scene = new Scene(ventanaDos);
             ventana.setScene(scene);
+           
             Tablero controller = loader.getController();
             controller.setStagePrincipal(ventana);
             ventana.show();

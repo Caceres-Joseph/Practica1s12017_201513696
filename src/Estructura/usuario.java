@@ -10,8 +10,8 @@ package Estructura;
  * @author joseph
  */
 public class usuario {
+
     public String nombre;
-    
-            
-    
+    public int puntuacion;
+
 }

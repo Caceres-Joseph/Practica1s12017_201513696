@@ -1,0 +1,20 @@
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-border-color: transparent white transparent white;
+    -fx-background-color: transparent, derive( white,0%);
+}
+
+.split-pane:vertical > .split-pane-divider {
+    -fx-border-color: transparent white transparent white;
+    -fx-background-color: transparent, derive( white,0%);
+}
+.split-pane {
+    -fx-padding: 1 0 0 0;
+     -fx-border-color:white;
+}
+.split-pane > .split-pane-divider {  
+    -fx-padding: 0 0.10em 0 0.10em;  
+} 
+
+/*#656565 -2  #043761
+*/
