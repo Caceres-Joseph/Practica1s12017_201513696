@@ -1,6 +1,8 @@
 package Juego;
 
+import Estructura.ficha;
 import Estructura.listaUsuario;
+import Estructura.matrizOrtogonal;
 import Estructura.usuario;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTabPane;
@@ -30,6 +32,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javax.swing.JOptionPane;
 
 /**
  * FXML Controller class
@@ -39,6 +42,8 @@ import javafx.stage.Stage;
 public class Tablero implements Initializable {
 
     listaUsuario listaDeUsuario = new listaUsuario();
+    matrizOrtogonal matriz =new matrizOrtogonal(Lectura.LeerXML.dimensionMatriz);
+    
 
     @FXML
     private JFXButton PrimerFicha;
@@ -95,6 +100,7 @@ public class Tablero implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         // TODO
+        pintarCuadritos();
     }
 
     @FXML
@@ -121,6 +127,11 @@ public class Tablero implements Initializable {
 
     @FXML
     void btnPrueba1(ActionEvent event) {//iniciar juego
+        String fil=JOptionPane.showInputDialog("fila");
+        Integer fila=Integer.valueOf(fil);
+        String col=JOptionPane.showInputDialog("columna");
+        Integer columna=Integer.valueOf(col);
+        System.out.println(matriz.devolverFichaMatriz(fila,columna).letra.getText());
         
     }
 
@@ -130,6 +141,34 @@ public class Tablero implements Initializable {
 
     @FXML
     private void clickTabPane(MouseEvent event) {
+    }
+
+    public void pintarCuadritos() {
+        HBox horizontal = new HBox();
+        BorderPane panelBorde = new BorderPane();
+        horizontal.setSpacing(7.0);
+        
+        for (int i = 0; i < Lectura.LeerXML.dimensionMatriz; i++) {
+            for (int j = 0; j < Lectura.LeerXML.dimensionMatriz; j++) {
+                ficha fichaTablero=new ficha(j, i);
+                matriz.insertarElementoEnPosicion(j, i, fichaTablero);
+            }
+        }
+        
+        for (int j = 0; j < Lectura.LeerXML.dimensionMatriz; j++) {
+            VBox verticalSupremo = new VBox();
+            verticalSupremo.setSpacing(7.0);
+            for (int k = 0; k < Lectura.LeerXML.dimensionMatriz; k++) {
+                
+                verticalSupremo.getChildren().add(matriz.devolverFichaMatriz(k, j).letra);
+            }
+            horizontal.setAlignment(Pos.CENTER);
+            horizontal.getChildren().add(verticalSupremo);
+        }
+        
+        panelBorde.setCenter(horizontal);
+        panelFihcasTablero.setContent(panelBorde);
+
     }
 
     public void pintarLabels() {

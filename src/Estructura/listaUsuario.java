@@ -51,7 +51,7 @@ public class listaUsuario {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("...");
             alert.setHeaderText("Usuario repetido");
-            String s = "El usuario ya estaba registrado, elija otro nombre ";
+            String s = "El usuario ya estaba registrado, elija otro nombre. ";
             alert.setContentText(s);
             alert.show();
         } else {

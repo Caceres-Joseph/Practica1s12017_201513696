@@ -16,8 +16,9 @@ import org.jdom2.input.SAXBuilder;
 
 public class LeerXML {
 
-  public static listaDiccionario ListaDiccionario = new listaDiccionario();
-  public static colaLetra colaLetra1=new colaLetra();
+    public static listaDiccionario ListaDiccionario = new listaDiccionario();
+    public static colaLetra colaLetra1 = new colaLetra();
+    public static Integer dimensionMatriz;
 
     public LeerXML(String ruta) {
 
@@ -31,6 +32,8 @@ public class LeerXML {
 
             System.out.println("\n----Tablero----");
             Element node4 = (Element) dimension.get(0);
+
+            dimensionMatriz = Integer.valueOf(node4.getText());
             System.out.println("Dimensión: " + node4.getText());
 
             List list = rootNode.getChildren("dobles");//Capturando los dobles
@@ -72,5 +75,5 @@ public class LeerXML {
             System.out.println(jdomex.getMessage());
         }
     }
-    
+
 }

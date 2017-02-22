@@ -12,7 +12,6 @@ public class matrizOrtogonal {
 
     public matrizOrtogonal(Integer dimension) {
         this.dimension = dimension - 1;
-        
         crearCabezeras();
         crearElementos();
     }
@@ -62,6 +61,45 @@ public class matrizOrtogonal {
             }
 
         }
+    }
+    ///Función que devuelve el nodo ingresando la fila y la columna
+    public ficha devolverFichaMatriz(int fila, int columna) {
+
+        if (fila > dimension) {
+            fila = dimension;
+        }
+        if (columna > dimension) {
+            columna = dimension;
+        }
+        NodoMatriz recorrer = cabeza;
+
+        for (int i = 0; i < fila; i++) { ///recore hacia abajo la cantidad de filas
+            recorrer = recorrer.abajo;
+        }
+        for (int j = 0; j < columna; j++) {
+            recorrer = recorrer.siguiente;
+        }
+        return recorrer.ficha;
+
+    }
+    public void insertarElementoEnPosicion(int fila, int columna, ficha fich) {
+
+        if (fila > dimension) {
+            fila = dimension;
+        }
+        if (columna > dimension) {
+            columna = dimension;
+        }
+        NodoMatriz recorrer = cabeza;
+
+        for (int i = 0; i < fila; i++) { ///recore hacia abajo la cantidad de filas
+            recorrer = recorrer.abajo;
+        }
+        for (int j = 0; j < columna; j++) {
+            recorrer = recorrer.siguiente;
+        }
+        recorrer.setFicha(fich);
+
     }
 
     public class NodoMatriz {
