@@ -10,8 +10,13 @@ package Estructura;
  * @author joseph
  */
 public class usuario {
-
+    public listaDiccionario listaDeLetras;
+            
     public String nombre;
     public int puntuacion;
 
+    public usuario() {
+        puntuacion = 0;
+        listaDeLetras=new listaDiccionario();
+    }
 }

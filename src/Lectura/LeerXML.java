@@ -6,6 +6,7 @@ package Lectura;
  */
 import Estructura.colaLetra;
 import Estructura.listaDiccionario;
+import Estructura.matrizOrtogonal;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -19,6 +20,7 @@ public class LeerXML {
     public static listaDiccionario ListaDiccionario = new listaDiccionario();
     public static colaLetra colaLetra1 = new colaLetra();
     public static Integer dimensionMatriz;
+    matrizOrtogonal matriz;
 
     public LeerXML(String ruta) {
 
@@ -33,8 +35,9 @@ public class LeerXML {
             System.out.println("\n----Tablero----");
             Element node4 = (Element) dimension.get(0);
 
-            dimensionMatriz = Integer.valueOf(node4.getText());
+            dimensionMatriz = Integer.valueOf(node4.getText());//captura la dimension
             System.out.println("Dimensión: " + node4.getText());
+            matriz = new matrizOrtogonal(dimensionMatriz);
 
             List list = rootNode.getChildren("dobles");//Capturando los dobles
             for (int i = 0; i < list.size(); i++) {

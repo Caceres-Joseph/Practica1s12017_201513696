@@ -1,0 +1,10 @@
+digraph grafo {
+node [shape=circle];
+node [style=filled];
+node [fillcolor="#EEEEEE"];
+node [color="#EEEEEE"];
+edge [color="#005500   #214a89"];
+perez->juan;
+juan->perez;
+
+rankdir=LR;}

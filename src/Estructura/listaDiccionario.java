@@ -1,6 +1,8 @@
 package Estructura;
 
+import Juego.Tablero;
 import Reporte.archivoDot;
+import javafx.application.Platform;
 
 /**
  *
@@ -10,8 +12,8 @@ public class listaDiccionario {
 
     public Nodo cabeza = null;
     public int longitud = 0;
-    archivoDot archiDot=new archivoDot();
-    Integer contadorDot=0;
+    archivoDot archiDot = new archivoDot();
+
     /**
      * ******************
      *                  *
@@ -129,45 +131,103 @@ public class listaDiccionario {
         System.out.println("----------------------fin--------------------");
     }
 
+    public Integer ValorPalabra() {
+        letra funcLetra = new letra();
+        Integer retorno = 0;
+        Nodo puntero = cabeza;
+
+        while (puntero != null) {
+            retorno = retorno + funcLetra.retornarValorLetra(puntero.palabra);
+            System.out.println(puntero.palabra);
+            puntero = puntero.siguiente;
+        }
+        return retorno;
+    }
+
     public String cadenaDot() {
+
         String cadena = "";
         Nodo puntero = cabeza;
 
-        while (puntero.siguiente.siguiente != null) {
-
-//        String lineasDot = " V1 -> V2;\n";
-//        lineasDot=lineasDot+" V2 <- V1;";
-//        System.out.println(lineasDot);
-//        return lineasDot;
+        while (puntero.siguiente != null) {
             cadena = cadena + puntero.palabra + "->" + puntero.siguiente.palabra + ";\n";
-            
-            System.out.println(puntero.palabra);
             puntero = puntero.siguiente;
         }
         return cadena;
     }
-    public Integer actuaalizarDot(){
-       archiDot.escribirHTMLDiccionario(contadorDot);
-        archiDot.escribirDiccionario(cadenaDot());
-        archiDot.dibujarDiccionario(contadorDot);
-        
-       return  contadorDot++;
+
+    public void actualizarWeb() {
+        archiDot.escribirDiccionario(cadenaDot(), "diccionario.dot");
+        archiDot.dibujarDot("diccionario.png", "diccionario.dot");
+        //archiDot.escribirHTMLDiccionario();
+
+        Thread hilo = new Thread() {
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    System.out.println("Error al correr hilo>>>>" + ex);
+                }
+                Platform.runLater(() -> Tablero.webDiccionarioS.getEngine().reload());
+            }
+        };
+        hilo.start();
+
+//        System.out.println(contadorDot);
+    }
+
+    public String cadenaDot1() {
+        Integer cont = 0;
+        String cadena = "";
+        Nodo puntero = cabeza;
+
+        while (puntero.siguiente != null) {
+            cadena = cadena + "node" + String.valueOf(cont) + " [label=" + puntero.palabra + "];\n";
+            cadena = cadena + "node" + String.valueOf(cont) + " -> node" + String.valueOf(cont + 1) + ";\n";
+//             cadena = cadena + aux.usuario1.nombre + "->" + aux.siguiente.usuario1.nombre + ";\n";
+            puntero = puntero.siguiente;
+            cont++;
+        }
+        cadena=cadena+"node"+String.valueOf(cont)+" [label="+puntero.palabra+"];\n";
+        return cadena;
+    }
+
+    public void actualizarWeb1() {
+        archiDot.escribirDiccionario(cadenaDot1(), "ficha.dot");
+        archiDot.dibujarDot("ficha.png", "ficha.dot");
+        //archiDot.escribirHTMLDiccionario();
+
+        Thread hilo = new Thread() {
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    System.out.println("Error al correr hilo>>>>" + ex);
+                }
+                Platform.runLater(() -> Tablero.webFichaS.getEngine().reload());
+            }
+        };
+        hilo.start();
+
+//        System.out.println(contadorDot);
     }
 
     public boolean buscar(String busqueda) {
-
+        boolean retorno = false;
         Nodo puntero = cabeza;
+        System.out.println("-----------------Diccionario------------------");
         while (puntero.siguiente != null) {
-
-            puntero = puntero.siguiente;
-            puntero = puntero.siguiente;
-            if (puntero.palabra.equals(busqueda)) {
-                System.out.println(puntero.palabra);
+            System.out.println(puntero.palabra);
+            if (busqueda.equals(puntero.palabra)) {
+                System.out.println("si lo encontro");
+                retorno = true;
                 break;
+
             }
+            puntero = puntero.siguiente;
 
         }
-        return true;
+        return retorno;
     }
 
     public String obtener(int n) {

@@ -1,4 +1,0 @@
-digraph grafo {
-node [shape=circle];
- V1 -> V2 ;
-rankdir=LR;}

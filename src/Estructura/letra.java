@@ -37,8 +37,14 @@ public class letra {
             retorno = 10;
         } else {
             System.out.println("No se encontro la letra:>>>"+letr);
-            retorno = 1;
+            retorno = 0;
         }
+        return retorno;
+    }
+    public Integer recorrerListaLetras(listaDiccionario listaLetras){
+        Integer retorno=0;
+        
+        
         return retorno;
     }
 

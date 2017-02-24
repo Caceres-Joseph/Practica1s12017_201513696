@@ -1,6 +1,7 @@
 package Juego;
 
 import Estructura.ficha;
+import Estructura.letra;
 import Estructura.listaUsuario;
 import Estructura.matrizOrtogonal;
 import Estructura.usuario;
@@ -11,6 +12,7 @@ import java.lang.Thread.State;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -23,14 +25,17 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
@@ -53,8 +58,42 @@ public class Tablero implements Initializable {
     listaUsuario listaDeUsuario = new listaUsuario();
     matrizOrtogonal matriz = new matrizOrtogonal(Lectura.LeerXML.dimensionMatriz);
 
+    public static WebView webDiccionarioS;
+    public static WebView webFichaS;
+    public static WebView webTableroS;
+    public static WebView webColaS;
+    public static WebView webJugadoresS;
+
+    public static JFXButton PrimerFichaS;
+    public static JFXButton PrimerFicha1S;
+    public static JFXButton PrimerFicha2S;
+    public static JFXButton PrimerFicha3s;
+    public static JFXButton PrimerFicha4s;
+    public static JFXButton PrimerFicha5s;
+    public static JFXButton PrimerFicha6s;
+
+    @FXML
+    private TextArea textUsuarios;
+
+    @FXML
+    private Label lblUsuario;
+    @FXML
+    private Label lblScore;
+
     @FXML
     private WebView webDiccionario;
+
+    @FXML
+    private WebView webFicha;
+
+    @FXML
+    private WebView webTablero;
+
+    @FXML
+    private WebView webCola;
+
+    @FXML
+    private WebView webJugadores;
 
     @FXML
     private JFXButton PrimerFicha;
@@ -109,14 +148,40 @@ public class Tablero implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        webDiccionarioS = webDiccionario;
+        webFichaS = webFicha;
+        webTableroS = webTablero;
+        webColaS = webCola;
+        webJugadoresS = webJugadores;
 
+        //botones estaticos
+        PrimerFichaS = PrimerFicha;
+        PrimerFicha1S = PrimerFicha1;
+        PrimerFicha2S = PrimerFicha2;
+        PrimerFicha3s = PrimerFicha3;
+        PrimerFicha4s = PrimerFicha4;
+        PrimerFicha5s = PrimerFicha5;
+        PrimerFicha6s = PrimerFicha6;
+        //scrabble.LecturaXML.colaDeLetras.actualizarWeb();
         // TODO
         pintarCuadritos();
-      inicializarWeb();
+        inicializarWebs();
+
+        //inicializar los reportes
+//        Lectura.LeerXML.ListaDiccionario.actualizarWeb();
+//        Lectura.LeerXML.colaLetra1.actualizarWeb();
+//        listaDeUsuario.actualizarWeb();
+//        matriz.actualizarWeb();
     }
 
     @FXML
     void agregarUsuario(ActionEvent event) {
+        if (contadorUsuario == 0) {
+
+        } else if (contadorUsuario == 1) {
+            listaDeUsuario.inicicializarAux();
+        }
+        contadorUsuario++;
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Ingrese el nombre del usuario");
         dialog.setHeaderText("Ingresar");
@@ -126,8 +191,12 @@ public class Tablero implements Initializable {
             usuario user = new usuario();
             user.nombre = result.get();
             user.puntuacion = 0;
+            lblUsuario.setText(user.nombre);
+            lblScore.setText(String.valueOf(user.puntuacion));
             listaDeUsuario.insertarUsuario(user);
+
         }
+        listaDeUsuario.actualizarWeb();
 
         //pintarLabels();
     }
@@ -142,38 +211,26 @@ public class Tablero implements Initializable {
         if (result.isPresent()) {
             Lectura.LeerXML.ListaDiccionario.insertarAlPrincipio(result.get().toUpperCase());
         }
-
+        Lectura.LeerXML.ListaDiccionario.actualizarWeb();
     }
 
     @FXML
     void btnPrueba2(ActionEvent event) {
-        /*
-        //Lectura.LeerXML.ListaDiccionario.actuaalizarDot();
-//         WebEngine webEngine = webDiccionario.getEngine();
-        String ruta = new File("").getAbsolutePath();
-        ruta = "file://" + ruta + "/src/Images/Grafo/diccionario.html";
-//        webEngine.load(ruta);
-        System.out.println("boton");
-        try {
-            apProductos.getChildren().clear();
-            //apCaja.getChildren().clear();
-            WebView wu = new WebView();
-            WebEngine web = wu.getEngine();
-            ruta = "file://" + ruta + "/src/Images/Grafo/diccionario.html";
-            ScrollPane scrollPane = new ScrollPane();
-            scrollPane.setContent(wu);
+//        listaDeUsuario.inicicializarAux();
 
-            web.load(ruta);
+       // textUsuarios.setText("Esta cadena es demasiado larga y no deberia de caber\n");
+        textUsuarios.setText(listaDeUsuario.cadenaUsuario());
+    }
 
-            apProductos.getChildren().add(scrollPane);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        
-        */
-        Lectura.LeerXML.ListaDiccionario.actuaalizarDot();
-            webEngine.reload();
-        
+    @FXML
+    void btnPrueba3(ActionEvent event) {
+        //matriz.imprimir();
+        //matriz.actualizarWeb();
+//        
+//     System.out.println(Lectura.LeerXML.ListaDiccionario.buscar(matriz.buscarPalabraHorizontal()));
+        //  System.out.println("Los puntos de la palabra son: " + String.valueOf(matriz.buscarPalabraHorizontal()));
+        matriz.actualizarWeb();
+//     System.out.println(Lectura.LeerXML.ListaDiccionario.buscar("JHOSEF"));
 
     }
 
@@ -182,16 +239,32 @@ public class Tablero implements Initializable {
         stagePrincipal.setMaximized(true);
     }
 
-    @FXML
-    void btnPrueba1(ActionEvent event) {//iniciar juego
+    public void agregarLetrasABotones() {
+        String palabra;
         try {
-            PrimerFicha.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
-            PrimerFicha1.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
-            PrimerFicha2.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
-            PrimerFicha3.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
-            PrimerFicha4.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
-            PrimerFicha5.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
-            PrimerFicha6.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
+            palabra = scrabble.LecturaXML.colaDeLetras.pop().letra;
+            PrimerFicha.setText(palabra);
+            listaDeUsuario.puntero.usuario1.listaDeLetras.insertarDeUltimo(palabra);
+            palabra = scrabble.LecturaXML.colaDeLetras.pop().letra;
+            PrimerFicha1.setText(palabra);
+            listaDeUsuario.puntero.usuario1.listaDeLetras.insertarDeUltimo(palabra);
+            palabra = scrabble.LecturaXML.colaDeLetras.pop().letra;
+            PrimerFicha2.setText(palabra);
+            listaDeUsuario.puntero.usuario1.listaDeLetras.insertarDeUltimo(palabra);
+            palabra = scrabble.LecturaXML.colaDeLetras.pop().letra;
+            PrimerFicha3.setText(palabra);
+            listaDeUsuario.puntero.usuario1.listaDeLetras.insertarDeUltimo(palabra);
+            palabra = scrabble.LecturaXML.colaDeLetras.pop().letra;
+            PrimerFicha4.setText(palabra);
+            listaDeUsuario.puntero.usuario1.listaDeLetras.insertarDeUltimo(palabra);
+            palabra = scrabble.LecturaXML.colaDeLetras.pop().letra;
+            PrimerFicha5.setText(palabra);
+            listaDeUsuario.puntero.usuario1.listaDeLetras.insertarDeUltimo(palabra);
+            palabra = scrabble.LecturaXML.colaDeLetras.pop().letra;
+            PrimerFicha6.setText(palabra);
+            listaDeUsuario.puntero.usuario1.listaDeLetras.insertarDeUltimo(palabra);
+
+            listaDeUsuario.puntero.usuario1.listaDeLetras.actualizarWeb1();
         } catch (Exception e) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("...");
@@ -200,11 +273,19 @@ public class Tablero implements Initializable {
             alert.setContentText(s);
             alert.show();
         }
+        scrabble.LecturaXML.colaDeLetras.actualizarWeb();
+    }
 
+    @FXML
+    void btnPrueba1(ActionEvent event) {//iniciar juego
+        agregarLetrasABotones();
+         textUsuarios.setText(listaDeUsuario.cadenaUsuario());
+         matriz.actualizarWeb();
     }
 
     @FXML
     private void clickTab(MouseEvent event) {
+
     }
 
     @FXML
@@ -393,13 +474,188 @@ public class Tablero implements Initializable {
     void PrimerDone6(DragEvent event) {
         PrimerFicha6.setText("");
     }
-WebEngine webEngine;
+    WebEngine weDiccionario;
+    WebEngine weFicha;
+    WebEngine weTablero;
+    WebEngine weCola;
+    WebEngine weJugadores;
+
+    //WebEngine we
     //src/Images/Grafo/
-    public void inicializarWeb() {
-        webEngine=webDiccionario.getEngine();
+    public void inicializarWebs() {
+
         String ruta = new File("").getAbsolutePath();
-        ruta = "file://" + ruta + "/src/Images/Grafo/diccionario.html";
-        webEngine.load(ruta);
+
+        weDiccionario = webDiccionario.getEngine();
+        weDiccionario.load("file://" + ruta + "/src/Images/Grafo/diccionario.html");
+
+        weFicha = webFicha.getEngine();
+        weFicha.load("file://" + ruta + "/src/Images/Grafo/ficha.html");
+
+        weTablero = webTablero.getEngine();
+        weTablero.load("file://" + ruta + "/src/Images/Grafo/tablero.html");
+
+        weCola = webCola.getEngine();
+        weCola.load("file://" + ruta + "/src/Images/Grafo/cola.html");
+
+        weJugadores = webJugadores.getEngine();
+        weJugadores.load("file://" + ruta + "/src/Images/Grafo/jugadores.html");
+
+    }
+
+    Integer contadorUsuario = 0;
+
+    @FXML
+    void validarTiro(ActionEvent event) {
+//        lblScore.setText(String.valueOf(listaDeUsuario.avanzarEspacio(matriz.buscarPalabraHorizontal())));
+//        
+//        System.out.println("Los puntos de la palabra son: " + String.valueOf(matriz.buscarPalabraHorizontal()));
+
+//    listaDeUsuario.avanzarUno();
+//    lblUsuario.setText(listaDeUsuario.inicio.usuario1.nombre);
+        lblUsuario.setText(listaDeUsuario.puntero.usuario1.nombre);
+        lblScore.setText(String.valueOf(listaDeUsuario.avanzarEspacio(matriz.buscarPalabraHorizontal())));
+        agregarLetrasABotones();
+//            System.out.println(listaDeUsuario.avanzarEspacio(10));
+ textUsuarios.setText(listaDeUsuario.cadenaUsuario());
+matriz.actualizarWeb();
+    }
+
+    @FXML
+    void cancelarTiro(ActionEvent event) {
+        matriz.cancelarTiro();
+         textUsuarios.setText(listaDeUsuario.cadenaUsuario());
+         matriz.actualizarWeb();
+    }
+
+    @FXML
+    void clickPrimerFicha(ActionEvent event) {
+    }
+
+    @FXML
+    void MousePrimerFicha(MouseEvent event) {
+        if (event.getButton().equals(MouseButton.SECONDARY)) {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Cambio");
+            alert.setHeaderText("Seguro que desea cambiar la ficha actual?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                cambio(PrimerFicha);
+            } else {
+                // ... user chose CANCEL or closed the dialog
+            }
+        }
+    }
+
+    @FXML
+    void MousePrimerFicha1(MouseEvent event) {
+        if (event.getButton().equals(MouseButton.SECONDARY)) {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Cambio");
+            alert.setHeaderText("Seguro que desea cambiar la ficha actual?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                cambio(PrimerFicha1);
+            } else {
+                // ... user chose CANCEL or closed the dialog
+            }
+        }
+    }
+
+    @FXML
+    void MousePrimerFicha2(MouseEvent event) {
+        if (event.getButton().equals(MouseButton.SECONDARY)) {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Cambio");
+            alert.setHeaderText("Seguro que desea cambiar la ficha actual?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                cambio(PrimerFicha2);
+            } else {
+                // ... user chose CANCEL or closed the dialog
+            }
+        }
+    }
+
+    @FXML
+    void MousePrimerFicha3(MouseEvent event) {
+        if (event.getButton().equals(MouseButton.SECONDARY)) {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Cambio");
+            alert.setHeaderText("Seguro que desea cambiar la ficha actual?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                cambio(PrimerFicha3);
+            } else {
+                // ... user chose CANCEL or closed the dialog
+            }
+        }
+    }
+
+    @FXML
+    void MousePrimerFicha4(MouseEvent event) {
+        if (event.getButton().equals(MouseButton.SECONDARY)) {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Cambio");
+            alert.setHeaderText("Seguro que desea cambiar la ficha actual?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                cambio(PrimerFicha4);
+            } else {
+                // ... user chose CANCEL or closed the dialog
+            }
+        }
+    }
+
+    @FXML
+    void MousePrimerFicha5(MouseEvent event) {
+        if (event.getButton().equals(MouseButton.SECONDARY)) {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Cambio");
+            alert.setHeaderText("Seguro que desea cambiar la ficha actual?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                cambio(PrimerFicha5);
+            } else {
+                // ... user chose CANCEL or closed the dialog
+            }
+        }
+    }
+
+    @FXML
+    void MousePrimerFicha6(MouseEvent event) {
+        if (event.getButton().equals(MouseButton.SECONDARY)) {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Cambio");
+            alert.setHeaderText("Seguro que desea cambiar la ficha actual?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                cambio(PrimerFicha6);
+            } else {
+                // ... user chose CANCEL or closed the dialog
+            }
+        }
+    }
+
+    public void cambio(JFXButton boton) {
+//        scrabble.LecturaXML.colaDeLetras.pop().letra
+        letra letr = new letra();
+
+        String letra = boton.getText();
+//                scrabble.LecturaXML.colaDeLetras.pop().letra;
+        letr.letra = letra;
+
+        scrabble.LecturaXML.colaDeLetras.push(letr);
+
+        boton.setText(scrabble.LecturaXML.colaDeLetras.pop().letra);
+
+        scrabble.LecturaXML.colaDeLetras.actualizarWeb();
+    }
+
+    @FXML
+    void fin(ActionEvent event) {
+        System.out.println("---------" + listaDeUsuario.puntero.usuario1.nombre + "---------");
+        listaDeUsuario.puntero.usuario1.listaDeLetras.imprimir();
     }
 
 }

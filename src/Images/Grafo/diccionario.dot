@@ -4,7 +4,8 @@ node [style=filled];
 node [fillcolor="#EEEEEE"];
 node [color="#EEEEEE"];
 edge [color="#005500   #214a89"];
-PAN->JUEGO;
+TEA->A;
+A->JUEGO;
 JUEGO->CORREO;
 CORREO->PRIMERA;
 PRIMERA->PRACTICA;
@@ -15,5 +16,6 @@ DOS->UNO;
 UNO->ESTAS;
 ESTAS->COMO;
 COMO->MUNDO;
+MUNDO->HOLA;
 
 rankdir=LR;}

@@ -28,6 +28,7 @@ public class Scrabble extends Application {
         sta=stage;
         //es un comentario
     }
+    
     /**
      * @param args the command line arguments
      */
