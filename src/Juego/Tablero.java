@@ -519,6 +519,7 @@ public class Tablero implements Initializable {
 //            System.out.println(listaDeUsuario.avanzarEspacio(10));
  textUsuarios.setText(listaDeUsuario.cadenaUsuario());
 matriz.actualizarWeb();
+Lectura.LeerXML.colaLetra1.actualizarWeb();
     }
 
     @FXML
@@ -654,8 +655,16 @@ matriz.actualizarWeb();
 
     @FXML
     void fin(ActionEvent event) {
-        System.out.println("---------" + listaDeUsuario.puntero.usuario1.nombre + "---------");
+//        System.out.println("---------" + listaDeUsuario.puntero.usuario1.nombre + "---------");
         listaDeUsuario.puntero.usuario1.listaDeLetras.imprimir();
+         
+        
+        Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("...");
+            alert.setHeaderText("Usuario repetido");
+            String s = listaDeUsuario.cadenaUsuario();
+            alert.setContentText(s);
+            alert.show();
     }
 
 }

@@ -4,7 +4,8 @@ node [style=filled];
 node [fillcolor="#EEEEEE"];
 node [color="#EEEEEE"];
 edge [color="#005500   #214a89"];
-perez->juan;
-juan->perez;
+SuAgarre->Joseph;
+Joseph->Tun;
+Tun->SuAgarre;
 
 rankdir=LR;}
